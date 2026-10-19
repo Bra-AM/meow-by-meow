@@ -206,7 +206,9 @@ wave['behavior'] = np.array(behaviors)[probs.argmax(axis=1)][nearest]
 color = alt.Color('behavior:N', title='sounds',
                   scale=alt.Scale(domain=behaviors, scheme=COLOR_SCHEME))
 waveform_chart = alt.Chart(wave).mark_bar(size=2).encode(
-    x=alt.X('time:Q', title='time (seconds)'),
+    # Pin the axis to the recording; bar marks otherwise pad it on both sides.
+    x=alt.X('time:Q', title='time (seconds)',
+            scale=alt.Scale(domain=[0, sample.size / rate], nice=False)),
     y=alt.Y('amplitude:Q', title='loudness', axis=alt.Axis(labels=False)),
     color=color,
 ).properties(height=220)
